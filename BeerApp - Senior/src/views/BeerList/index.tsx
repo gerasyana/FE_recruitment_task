@@ -1,18 +1,11 @@
-import { useEffect, useState } from 'react';
-import { Beer } from '../../types';
-import { fetchData } from './utils';
 import { Avatar, List, ListItemAvatar, ListItemButton, ListItemText } from '@mui/material';
 import SportsBar from '@mui/icons-material/SportsBar';
-import { useNavigate } from 'react-router-dom';
+import Filters from './components/Filters';
+import Pagination from './components/Pagination';
+import { useBeers } from './useBeers';
 
 const BeerList = () => {
-  const navigate = useNavigate();
-  const [beerList, setBeerList] = useState<Array<Beer>>([]);
-
-  // eslint-disable-next-line
-  useEffect(fetchData.bind(this, setBeerList), []);
-
-  const onBeerClick = (id: string) => navigate(`/beer/${id}`);
+  const { beerList, filters, onBeerClick, onFiltersChange, onPageChange, onRowsPerPage } = useBeers()
 
   return (
     <article>
@@ -21,6 +14,13 @@ const BeerList = () => {
           <h1>BeerList page</h1>
         </header>
         <main>
+          <Filters filters={filters} onChange={onFiltersChange} />
+          <Pagination
+            count={100}
+            page={filters.page - 1 as number}
+            onPageChange={onPageChange}
+            rowsPerPage={filters.per_page as number}
+            onRowsPerPageChange={onRowsPerPage} />
           <List>
             {beerList.map((beer) => (
               <ListItemButton key={beer.id} onClick={onBeerClick.bind(this, beer.id)}>
@@ -35,7 +35,7 @@ const BeerList = () => {
           </List>
         </main>
       </section>
-    </article>
+    </article >
   );
 };
 

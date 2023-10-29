@@ -13,6 +13,11 @@ const getBeerList = (params?: ApiParams) => axios.get(`${API}breweries/`, { para
 const getRandomBeerList = (size = 3) =>
   axios.get(`${API}breweries/random`, {
     params: { size },
+    headers: {
+      'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache',
+      'Expires': '0',
+    },
   });
 
 const searchBeerList = (query: string, isAutoComplete = false) =>
